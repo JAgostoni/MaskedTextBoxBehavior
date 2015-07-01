@@ -122,6 +122,10 @@ namespace MaskedTextBoxBehavior
                     case '#': // Match Digit
                         regExMatch.Append(@"(\d{0,1})");
                         break;
+                    case 'A': // Match alphanumeric
+                        regExMatch.Append(@"([A-Za-z0-9]{0,1})");
+                        break;
+
                     default:
                         _Whitespace.Add(pos + 1);
                         regExMatch.Append(@"(\" + symbol + "{0,1})");
