@@ -127,7 +127,7 @@ namespace MaskedTextBoxBehavior
                 }
             }
 
-            regExMatch.Append("$");
+            regExMatch.Append(".*$");
 
             RegExMatch = regExMatch.ToString();
 

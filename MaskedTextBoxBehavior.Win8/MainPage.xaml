@@ -13,7 +13,7 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <TextBox Height="44" Width="500">
             <i:Interaction.Behaviors>
-                <mask:MaskedTextBoxBehavior Pattern="###-##-####" OriginalText="{Binding OText, Mode=TwoWay}">
+                <mask:MaskedTextBoxBehavior Pattern="(###) ###-####" OriginalText="{Binding OText, Mode=TwoWay}">
                     
                 </mask:MaskedTextBoxBehavior>
             </i:Interaction.Behaviors>
