@@ -15,7 +15,7 @@ namespace MaskedTextBoxBehavior.TESTS
             var masker = new MaskedTextProvider();
             masker.MatchPattern = "###-##-####";
 
-            Assert.AreEqual(@"^(\d{0,1})(\d{0,1})(\d{0,1})(\-{0,1})(\d{0,1})(\d{0,1})(\-{0,1})(\d{0,1})(\d{0,1})(\d{0,1})(\d{0,1})$", masker.RegExMatch);
+            Assert.AreEqual(@"^(\d{0,1})(\d{0,1})(\d{0,1})(\-{0,1})(\d{0,1})(\d{0,1})(\-{0,1})(\d{0,1})(\d{0,1})(\d{0,1})(\d{0,1}).*$", masker.RegExMatch);
         }
 
         [TestMethod]
@@ -27,7 +27,7 @@ namespace MaskedTextBoxBehavior.TESTS
             Assert.AreEqual("1", masker.ReplaceString("1"));
             Assert.AreEqual("12", masker.ReplaceString("12"));
             Assert.AreEqual("123", masker.ReplaceString("123"));
-            Assert.AreEqual("123-", masker.ReplaceString("123-"));
+            Assert.AreEqual("123", masker.ReplaceString("123-"));
             Assert.AreEqual("123-45", masker.ReplaceString("123-45"));
             Assert.AreEqual("123-45-6789", masker.ReplaceString("123-45-6789"));
             Assert.AreEqual("123-45-6789", masker.ReplaceString("123456789"));

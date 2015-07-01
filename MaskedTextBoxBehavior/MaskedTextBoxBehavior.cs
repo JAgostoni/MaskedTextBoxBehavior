@@ -80,10 +80,12 @@ namespace MaskedTextBoxBehavior
         void AttachedTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             var caret = AttachedTextBox.SelectionStart;
-           
-            AttachedTextBox.Text = _Masker.ReplaceString(AttachedTextBox.Text);
+            var newText = _Masker.ReplaceString(AttachedTextBox.Text);
+            var offset = newText.Length - AttachedTextBox.Text.Length;
+            
+            AttachedTextBox.Text = newText;
             OriginalText = _Masker.OriginalText;
-            AttachedTextBox.SelectionStart = caret + 1;
+            AttachedTextBox.SelectionStart = caret + offset;
         }
 
 
