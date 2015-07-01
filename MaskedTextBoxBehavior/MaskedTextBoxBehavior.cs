@@ -16,7 +16,7 @@ namespace MaskedTextBoxBehavior
     public sealed class MaskedTextBoxBehavior : DependencyObject, IBehavior
     {
 
-        private MaskedTextProvider _Masker;
+        private MaskedTextProvider _Masker = new MaskedTextProvider();
 
         public DependencyObject AssociatedObject
         {
@@ -26,16 +26,33 @@ namespace MaskedTextBoxBehavior
 
 
         public TextBox AttachedTextBox { get { return AssociatedObject as TextBox; } }
+        
         public string OriginalText { get; set; }
 
-        
+        public string Pattern
+        {
+            get
+            {
+                return (string)GetValue(PatternProperty);
+            }
+
+            set
+            {
+                SetValue(PatternProperty, value);
+                _Masker.MatchPattern = value;
+            }
+        }
+
+        public static DependencyProperty PatternProperty = DependencyProperty.Register("Pattern",
+                                                                                       typeof(string),
+                                                                                       typeof(MaskedTextBoxBehavior),
+                                                                                       new PropertyMetadata(string.Empty));
         
         public void Attach(DependencyObject associatedObject)
         {
             AssociatedObject = associatedObject;
             AttachedTextBox.TextChanged += AttachedTextBox_TextChanged;
-            _Masker = new MaskedTextProvider();
-            _Masker.MatchPattern = "###-###-####";
+            _Masker.MatchPattern = Pattern;
         }
 
 

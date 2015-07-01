@@ -12,7 +12,7 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <TextBox Height="100" Width="500">
             <i:Interaction.Behaviors>
-                <mask:MaskedTextBoxBehavior>
+                <mask:MaskedTextBoxBehavior Pattern="###-##-####">
                     
                 </mask:MaskedTextBoxBehavior>
             </i:Interaction.Behaviors>
