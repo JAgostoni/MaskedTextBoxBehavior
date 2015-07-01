@@ -27,7 +27,17 @@ namespace MaskedTextBoxBehavior
 
         public TextBox AttachedTextBox { get { return AssociatedObject as TextBox; } }
         
-        public string OriginalText { get; set; }
+        public string OriginalText 
+        {
+            get 
+            {
+                return (string)GetValue(OriginalTextProperty);
+            }
+            set
+            {
+                SetValue(OriginalTextProperty, value);
+            }
+        }
 
         public string Pattern
         {
@@ -47,7 +57,12 @@ namespace MaskedTextBoxBehavior
                                                                                        typeof(string),
                                                                                        typeof(MaskedTextBoxBehavior),
                                                                                        new PropertyMetadata(string.Empty));
-        
+
+        public static DependencyProperty OriginalTextProperty = DependencyProperty.Register("OriginalText",
+                                                                               typeof(string),
+                                                                               typeof(MaskedTextBoxBehavior),
+                                                                               new PropertyMetadata(string.Empty));
+
         public void Attach(DependencyObject associatedObject)
         {
             AssociatedObject = associatedObject;
@@ -67,6 +82,7 @@ namespace MaskedTextBoxBehavior
             var caret = AttachedTextBox.SelectionStart;
            
             AttachedTextBox.Text = _Masker.ReplaceString(AttachedTextBox.Text);
+            OriginalText = _Masker.OriginalText;
             AttachedTextBox.SelectionStart = caret + 1;
         }
 
@@ -77,6 +93,9 @@ namespace MaskedTextBoxBehavior
     public class MaskedTextProvider
     {
         public string RegExMatch { get; private set; }
+        public string OriginalText { get; set; }
+        
+        
         private List<int> _Whitespace;
 
         
@@ -119,6 +138,7 @@ namespace MaskedTextBoxBehavior
         {
             var groups = _Pattern.Match(enteredString).Groups;
             var replaceString = new StringBuilder();
+            var noSepPattern = new StringBuilder();
 
             for (int groupIndex = 1; groupIndex < groups.Count; groupIndex++)
             {
@@ -127,6 +147,7 @@ namespace MaskedTextBoxBehavior
                 if (group.Length > 0 && !_Whitespace.Contains(groupIndex))
                 {
                     replaceString.Append("$" + groupIndex);
+                    noSepPattern.Append("$" + groupIndex);
                 } 
                 else if (_Whitespace.Contains(groupIndex)) 
                 {
@@ -145,7 +166,7 @@ namespace MaskedTextBoxBehavior
                     break; // stop if no more matches
                 }
             }
-
+            OriginalText = _Pattern.Replace(enteredString, noSepPattern.ToString());
             return _Pattern.Replace(enteredString, replaceString.ToString());
         }
 

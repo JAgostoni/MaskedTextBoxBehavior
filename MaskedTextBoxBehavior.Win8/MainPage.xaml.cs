@@ -22,6 +22,9 @@ namespace MaskedTextBoxBehavior.Win8
     /// </summary>
     public sealed partial class MainPage : Page
     {
+
+        public string OText { get { return ""; }  set { System.Diagnostics.Debug.WriteLine(value); } }
+
         public MainPage()
         {
             this.InitializeComponent();
