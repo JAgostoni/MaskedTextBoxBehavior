@@ -37,6 +37,7 @@ Your XAML file should look similar to this:
 This behavior is rather easy to use and can be added to any TextBox control. Refer to the sample project included in this repository for syntax.
 
 First, add the behavior to a given TextBox:
+
         <TextBox>
             <i:Interaction.Behaviors>
                 <mask:MaskedTextBoxBehavior Pattern="AAA-AA-AAAA">
