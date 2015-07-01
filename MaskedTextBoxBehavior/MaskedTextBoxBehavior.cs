@@ -35,7 +35,7 @@ namespace MaskedTextBoxBehavior
             AssociatedObject = associatedObject;
             AttachedTextBox.TextChanged += AttachedTextBox_TextChanged;
             _Masker = new MaskedTextProvider();
-            _Masker.MatchPattern = "(###) ###-####";
+            _Masker.MatchPattern = "###-###-####";
         }
 
 
@@ -48,26 +48,9 @@ namespace MaskedTextBoxBehavior
         void AttachedTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             var caret = AttachedTextBox.SelectionStart;
-            //var pattern = new Regex(@"^(\d{0,1})(\d{0,1})(\d{0,1})(\-{0,1})(\d{0,2})(\-{0,1})(\d{0,4})$");
-            //var groups = pattern.Match(AttachedTextBox.Text).Groups;
-
-            //var replaceString = "$1$2$3";
-
-            //if (groups[7].Length > 0)
-            //{
-            //    replaceString = "$1$2$3-$5-$7";
-
-            //}
-            //else if (groups[5].Length > 0)
-            //{
-            //    replaceString = "$1$2$3-$5";
-            //}
-
-            //var maskString = pattern.Replace(AttachedTextBox.Text, replaceString);
-
+           
             AttachedTextBox.Text = _Masker.ReplaceString(AttachedTextBox.Text);
             AttachedTextBox.SelectionStart = caret + 1;
-            //AttachedTextBox.Select(caret, AttachedTextBox.Text.Length);
         }
 
 
@@ -77,7 +60,7 @@ namespace MaskedTextBoxBehavior
     public class MaskedTextProvider
     {
         public string RegExMatch { get; private set; }
-        private List<int> _Separators;
+        private List<int> _Whitespace;
 
         
         private string _MatchPattern;
@@ -90,7 +73,7 @@ namespace MaskedTextBoxBehavior
         private void ParseMatchMattern()
         {
             StringBuilder regExMatch = new StringBuilder();
-            _Separators = new List<int>();
+            _Whitespace = new List<int>();
             regExMatch.Append("^");
 
             for (int pos = 0; pos < MatchPattern.Length; pos++)
@@ -102,7 +85,7 @@ namespace MaskedTextBoxBehavior
                         regExMatch.Append(@"(\d{0,1})");
                         break;
                     default:
-                        _Separators.Add(pos + 1);
+                        _Whitespace.Add(pos + 1);
                         regExMatch.Append(@"(\" + symbol + "{0,1})");
                         break;
                 }
@@ -124,11 +107,11 @@ namespace MaskedTextBoxBehavior
             {
                 var group = groups[groupIndex];
 
-                if (group.Length > 0)
+                if (group.Length > 0 && !_Whitespace.Contains(groupIndex))
                 {
                     replaceString.Append("$" + groupIndex);
                 } 
-                else if (_Separators.Contains(groupIndex)) 
+                else if (_Whitespace.Contains(groupIndex)) 
                 {
                     // Peek to next group ...
                     if (groups.Count >= groupIndex + 1)
